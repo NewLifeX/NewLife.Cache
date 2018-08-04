@@ -63,14 +63,12 @@ namespace NewLife.Caching
 
         #region 集合操作
         /// <summary>批量获取缓存项</summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="keys"></param>
         /// <returns></returns>
         [Api(nameof(GetAll))]
         public IDictionary<String, Object> GetAll(String[] keys) => Cache.GetAll<Object>(keys);
 
         /// <summary>批量设置缓存项</summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="values"></param>
         /// <param name="expire">过期时间，秒。小于0时采用默认缓存时间Expire</param>
         [Api(nameof(SetAll))]

@@ -34,7 +34,7 @@ namespace NewLife.Reflection
 
             Console.WriteLine("proj项目：{0}", proj);
 
-            var name = "NewLife.Cube";
+            var name = "NewLife.Cache";
             Console.WriteLine("项目：{0}", name);
             proj = ".".AsDirectory().GetAllFiles("*.csproj").FirstOrDefault().FullName;
             var spec = name + ".nuspec";
@@ -42,18 +42,8 @@ namespace NewLife.Reflection
             
             if (!File.Exists(specFile))
             {
-				var tar = "..\\..\\Bin\\" + name + ".dll";
+				var tar = "..\\Bin\\" + name + ".dll";
 				tar = tar.GetFullPath();
-                if (!File.Exists(tar))
-                {
-					tar = "..\\..\\Bin4\\" + name + ".exe";
-					tar = tar.GetFullPath();
-                }
-                if (!File.Exists(tar))
-                {
-					tar = "..\\..\\XCoder\\" + name + ".exe";
-					tar = tar.GetFullPath();
-                }
                 if (!File.Exists(tar))
                 {
 					Console.WriteLine("只能找项目文件了，总得做点啥不是");
@@ -109,10 +99,8 @@ namespace NewLife.Reflection
             cfg.Files.Clear();
             if (cfg.Files.Count == 0)
             {
-                AddFile(cfg, name, "dll;xml;pdb;exe", @"..\..\Bin", @"lib\net45");
-                AddFile(cfg, name, "dll;xml;pdb;exe", @"..\..\Bin2", @"lib\net20");
-                AddFile(cfg, name, "dll;xml;pdb;exe", @"..\..\Bin4", @"lib\net40");
-                AddFile(cfg, name, "dll;xml;pdb;exe", @"..\..\Bin\netstandard2.0", @"lib\netstandard2.0");
+                AddFile(cfg, name, "dll;xml;pdb;exe", @"..\Bin", @"lib\net45");
+                AddFile(cfg, name, "dll;xml;pdb;exe", @"..\Bin\netstandard2.0", @"lib\netstandard2.0");
 
                 if (name == "XCode") AddFile(cfg, null, "*.ps1", @"tools", @"tools");
             }
