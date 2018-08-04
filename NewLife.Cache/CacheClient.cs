@@ -74,12 +74,12 @@ namespace NewLife.Caching
         /// <summary>设置缓存项有效期</summary>
         /// <param name="key">键</param>
         /// <param name="expire">过期时间，秒</param>
-        public override Boolean SetExpire(String key, TimeSpan expire) => Invoke<Boolean>(nameof(SetExpire), new { key, expire });
+        public override Boolean SetExpire(String key, TimeSpan expire) => Invoke<Boolean>(nameof(SetExpire), new { key, expire = (Int64)expire.TotalSeconds });
 
         /// <summary>获取缓存项有效期</summary>
         /// <param name="key">键</param>
         /// <returns></returns>
-        public override TimeSpan GetExpire(String key) => Invoke<TimeSpan>(nameof(GetExpire), new { key });
+        public override TimeSpan GetExpire(String key) => TimeSpan.FromSeconds(Invoke<Int64>(nameof(GetExpire), new { key }));
         #endregion
 
         #region 集合操作

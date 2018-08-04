@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using NewLife.Caching;
 using NewLife.Log;
@@ -38,7 +39,7 @@ namespace Test
             client.Set("aa", 1234);
             client.Set("bb", false);
             client.Set("cc", 3.14);
-            client.Set("dd", "NewLife");
+            client.Set("dd", "NewLife", 5);
             client.Set("ee", new { Name = "新生命", Year = 2002 });
 
             Console.WriteLine(client.Get<Int32>("aa"));
@@ -46,6 +47,11 @@ namespace Test
             Console.WriteLine(client.Get<Double>("cc"));
             Console.WriteLine(client.Get<String>("dd"));
             Console.WriteLine(client.Get<Object>("ee").ToJson());
+
+            Console.WriteLine("Count={0}", client.Count);
+            Console.WriteLine("Keys={0}", client.Keys.Join());
+            Thread.Sleep(2000);
+            Console.WriteLine("Expire={0}", client.GetExpire("dd"));
         }
     }
 }
