@@ -34,19 +34,19 @@ namespace NewLife.Caching
         /// <param name="expire">过期时间，秒。小于0时采用默认缓存时间Expire</param>
         /// <returns></returns>
         [Api(nameof(Set))]
-        public Boolean Set<T>(String key, T value, Int32 expire = -1) => Cache.Set(key, value, expire);
+        public Boolean Set(String key, Object value, Int32 expire = -1) => Cache.Set(key, value, expire);
 
         /// <summary>获取缓存项</summary>
         /// <param name="key">键</param>
         /// <returns></returns>
         [Api(nameof(Get))]
-        public T Get<T>(String key) => Cache.Get<T>(key);
+        public Object Get(String key) => Cache.Get<Object>(key);
 
         /// <summary>批量移除缓存项</summary>
         /// <param name="keys">键集合</param>
         /// <returns></returns>
         [Api(nameof(Remove))]
-        public Int32 Remove(params String[] keys) => Cache.Remove(keys);
+        public Int32 Remove(String[] keys) => Cache.Remove(keys);
 
         /// <summary>设置缓存项有效期</summary>
         /// <param name="key">键</param>
@@ -67,33 +67,31 @@ namespace NewLife.Caching
         /// <param name="keys"></param>
         /// <returns></returns>
         [Api(nameof(GetAll))]
-        public IDictionary<String, T> GetAll<T>(IEnumerable<String> keys) => Cache.GetAll<T>(keys);
+        public IDictionary<String, Object> GetAll(String[] keys) => Cache.GetAll<Object>(keys);
 
         /// <summary>批量设置缓存项</summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="values"></param>
         /// <param name="expire">过期时间，秒。小于0时采用默认缓存时间Expire</param>
         [Api(nameof(SetAll))]
-        public void SetAll<T>(IDictionary<String, T> values, Int32 expire = -1) => Cache.SetAll(values, expire);
+        public void SetAll(IDictionary<String, Object> values, Int32 expire = -1) => Cache.SetAll(values, expire);
         #endregion
 
         #region 高级操作
         /// <summary>添加，已存在时不更新</summary>
-        /// <typeparam name="T">值类型</typeparam>
         /// <param name="key">键</param>
         /// <param name="value">值</param>
         /// <param name="expire">过期时间，秒。小于0时采用默认缓存时间<seealso cref="Cache.Expire"/></param>
         /// <returns></returns>
         [Api(nameof(Add))]
-        public Boolean Add<T>(String key, T value, Int32 expire = -1) => Cache.Add(key, value, expire);
+        public Boolean Add(String key, Object value, Int32 expire = -1) => Cache.Add(key, value, expire);
 
         /// <summary>设置新值并获取旧值，原子操作</summary>
-        /// <typeparam name="T">值类型</typeparam>
         /// <param name="key">键</param>
         /// <param name="value">值</param>
         /// <returns></returns>
         [Api(nameof(Replace))]
-        public T Replace<T>(String key, T value) => Cache.Replace(key, value);
+        public Object Replace(String key, Object value) => Cache.Replace(key, value);
 
         /// <summary>累加，原子操作</summary>
         /// <param name="key">键</param>

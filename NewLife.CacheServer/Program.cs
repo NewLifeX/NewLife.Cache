@@ -27,6 +27,16 @@ namespace NewLife.CacheServer
                 var svr = new ApiServer(3344);
                 svr.Log = XTrace.Log;
 
+#if DEBUG
+                svr.EncoderLog = XTrace.Log;
+
+                var ns = svr.EnsureCreate() as Net.NetServer;
+                ns.SessionLog = XTrace.Log;
+                ns.SocketLog = XTrace.Log;
+                ns.LogSend = true;
+                ns.LogReceive = true;
+#endif
+
                 var svc = new CacheService
                 {
                     Cache = MemoryCache.Default
