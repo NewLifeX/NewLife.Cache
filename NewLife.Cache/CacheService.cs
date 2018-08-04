@@ -104,8 +104,8 @@ namespace NewLife.Caching
         /// <param name="key">键</param>
         /// <param name="value">变化量</param>
         /// <returns></returns>
-        [Api(nameof(IncrementDouble))]
-        public Double IncrementDouble(String key, Double value) => Cache.Increment(key, value);
+        [Api(nameof(Increment2))]
+        public Double Increment2(String key, Double value) => Cache.Increment(key, value);
 
         /// <summary>递减，原子操作</summary>
         /// <param name="key">键</param>
@@ -118,8 +118,8 @@ namespace NewLife.Caching
         /// <param name="key">键</param>
         /// <param name="value">变化量</param>
         /// <returns></returns>
-        [Api(nameof(DecrementDouble))]
-        public Double DecrementDouble(String key, Double value) => Cache.Decrement(key, value);
+        [Api(nameof(Decrement2))]
+        public Double Decrement2(String key, Double value) => Cache.Decrement(key, value);
         #endregion
     }
 }

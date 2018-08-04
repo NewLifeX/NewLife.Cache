@@ -24,26 +24,32 @@ namespace NewLife.CacheServer
             private ApiServer _Server;
             protected override void StartWork(String reason)
             {
+                // 配置
+                var set = Setting.Current;
+
                 // 服务器
-                var svr = new ApiServer(3344);
-                svr.Log = XTrace.Log;
+                var svr = new ApiServer(set.Port)
+                {
+                    Log = XTrace.Log
+                };
 
-#if DEBUG
-                svr.EncoderLog = XTrace.Log;
+                if (set.Debug) svr.EncoderLog = XTrace.Log;
 
+                // 网络层日志
                 var ns = svr.EnsureCreate() as Net.NetServer;
                 ns.SessionLog = XTrace.Log;
                 ns.SocketLog = XTrace.Log;
+#if DEBUG
                 ns.LogSend = true;
                 ns.LogReceive = true;
 #endif
 
                 // 缓存提供者
-                MemoryCache.Default.Expire = 24 * 3600;
-                var svc = new CacheService
-                {
-                    Cache = MemoryCache.Default
-                };
+                var mc = new MemoryCache();
+                if (set.Expire > 0) mc.Expire = set.Expire;
+
+                // 注册RPC服务
+                var svc = new CacheService { Cache = mc };
                 svr.Register(svc, null);
 
                 svr.Start();
