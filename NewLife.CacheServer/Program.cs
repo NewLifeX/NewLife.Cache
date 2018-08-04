@@ -44,6 +44,9 @@ namespace NewLife.CacheServer
                 ns.LogReceive = true;
 #endif
 
+                // 统计日志
+                svr.StatPeriod = 10;
+
                 // 缓存提供者
                 var mc = new MemoryCache();
                 if (set.Expire > 0) mc.Expire = set.Expire;

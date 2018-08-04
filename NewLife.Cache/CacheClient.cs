@@ -14,6 +14,19 @@ namespace NewLife.Caching
         #endregion
 
         #region 远程操作
+        /// <summary>设置服务端地址。支持多地址负载均衡</summary>
+        /// <param name="servers"></param>
+        /// <returns></returns>
+        public ApiClient SetServer(params String[] servers)
+        {
+            var ac = Client ?? new ApiClient();
+            ac.Servers = servers;
+
+            Client = ac;
+
+            return ac;
+        }
+
         /// <summary>调用</summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="action"></param>
