@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>NewLife.Cache</AssemblyName>
     <AssemblyTitle>新生命缓存中间件</AssemblyTitle>
-    <Description>缓存服务端、缓存客户端</Description>
+    <Description>分布式缓存中间件</Description>
     <Company>新生命开发团队</Company>
     <Copyright>©2002-2018 新生命开发团队</Copyright>
     <FileVersion>1.0.2018.0804</FileVersion>

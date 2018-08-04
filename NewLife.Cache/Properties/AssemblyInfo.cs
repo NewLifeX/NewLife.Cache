@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
 [assembly: AssemblyTitle("新生命缓存中间件")]
-[assembly: AssemblyDescription("缓存服务端、缓存客户端")]
+[assembly: AssemblyDescription("分布式缓存中间件")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("NewLife.Cache")]
