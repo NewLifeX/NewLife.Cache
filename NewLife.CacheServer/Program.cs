@@ -24,6 +24,7 @@ namespace NewLife.CacheServer
             private ApiServer _Server;
             protected override void StartWork(String reason)
             {
+                // 服务器
                 var svr = new ApiServer(3344);
                 svr.Log = XTrace.Log;
 
@@ -37,6 +38,8 @@ namespace NewLife.CacheServer
                 ns.LogReceive = true;
 #endif
 
+                // 缓存提供者
+                MemoryCache.Default.Expire = 24 * 3600;
                 var svc = new CacheService
                 {
                     Cache = MemoryCache.Default

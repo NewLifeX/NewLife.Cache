@@ -52,13 +52,13 @@ namespace NewLife.Caching
         /// <param name="key">键</param>
         /// <param name="expire">过期时间，秒</param>
         [Api(nameof(SetExpire))]
-        public Boolean SetExpire(String key, TimeSpan expire) => Cache.SetExpire(key, expire);
+        public Boolean SetExpire(String key, Int64 expire) => Cache.SetExpire(key, TimeSpan.FromSeconds(expire));
 
         /// <summary>获取缓存项有效期</summary>
         /// <param name="key">键</param>
         /// <returns></returns>
         [Api(nameof(GetExpire))]
-        public TimeSpan GetExpire(String key) => Cache.GetExpire(key);
+        public Int64 GetExpire(String key) => (Int64)Cache.GetExpire(key).TotalSeconds;
         #endregion
 
         #region 集合操作
