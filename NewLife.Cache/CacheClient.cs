@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using NewLife.Remoting;
 
@@ -89,7 +90,7 @@ namespace NewLife.Caching
         /// <returns></returns>
         public override IDictionary<String, T> GetAll<T>(IEnumerable<String> keys)
         {
-            return Invoke<IDictionary<String, T>>(nameof(GetAll), new { keys });
+            return Invoke<IDictionary<String, T>>(nameof(GetAll), new { keys = keys.ToArray() });
         }
 
         /// <summary>批量设置缓存项</summary>
@@ -128,7 +129,7 @@ namespace NewLife.Caching
         /// <param name="key">键</param>
         /// <param name="value">变化量</param>
         /// <returns></returns>
-        public override Double Increment(String key, Double value) => Invoke<Double>(nameof(Increment), new { key, value });
+        public override Double Increment(String key, Double value) => Invoke<Double>(nameof(Increment) + "2", new { key, value });
 
         /// <summary>递减，原子操作</summary>
         /// <param name="key">键</param>
@@ -140,7 +141,7 @@ namespace NewLife.Caching
         /// <param name="key">键</param>
         /// <param name="value">变化量</param>
         /// <returns></returns>
-        public override Double Decrement(String key, Double value) => Invoke<Double>(nameof(Decrement), new { key, value });
+        public override Double Decrement(String key, Double value) => Invoke<Double>(nameof(Decrement) + "2", new { key, value });
         #endregion
     }
 }

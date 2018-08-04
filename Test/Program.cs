@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NewLife.Caching;
 using NewLife.Log;
+using NewLife.Reflection;
 using NewLife.Serialization;
 
 namespace Test
@@ -48,10 +49,25 @@ namespace Test
             Console.WriteLine(client.Get<String>("dd"));
             Console.WriteLine(client.Get<Object>("ee").ToJson());
 
+            Console.WriteLine();
             Console.WriteLine("Count={0}", client.Count);
             Console.WriteLine("Keys={0}", client.Keys.Join());
             Thread.Sleep(2000);
             Console.WriteLine("Expire={0}", client.GetExpire("dd"));
+
+            Console.WriteLine();
+            client.Decrement("aa", 30);
+            client.Increment("cc", 0.3);
+
+            Console.WriteLine();
+            var dic = client.GetAll<Object>(new[] { "aa", "cc", "ee" });
+            foreach (var item in dic)
+            {
+                var val = item.Value;
+                if (val != null && item.Value.GetType().GetTypeCode() == TypeCode.Object) val = val.ToJson();
+
+                Console.WriteLine("{0}={1}", item.Key, val);
+            }
         }
     }
 }
