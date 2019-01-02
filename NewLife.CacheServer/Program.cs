@@ -8,10 +8,7 @@ namespace NewLife.CacheServer
 {
     class Program
     {
-        static void Main(String[] args)
-        {
-            MyService.ServiceMain();
-        }
+        static void Main(String[] args) => new MyService().Main();
 
         class MyService : AgentServiceBase<MyService>
         {
@@ -69,8 +66,6 @@ namespace NewLife.CacheServer
 
                 base.StopWork(reason);
             }
-
-            public override Boolean Work(Int32 index) => false;
         }
     }
 }
