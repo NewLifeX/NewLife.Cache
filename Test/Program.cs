@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using NewLife.Caching;
@@ -35,8 +36,9 @@ namespace Test
 #if !DEBUG
             client.Bench();
 #else
-            client.Set("aa", 1234);
-            Console.WriteLine(client.ContainsKey("aa"));
+            Debug.Assert(client.Set("aa", 1234));
+            Debug.Assert(client.ContainsKey("aa"));
+            Debug.Assert(client.Get<Int32>("aa") == 1234);
 
             client.Set("bb", false);
             client.Set("cc", 3.14);
