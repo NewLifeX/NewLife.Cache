@@ -47,7 +47,16 @@ namespace NewLife.Caching
         public override void Init(String config) { }
 
         /// <summary>缓存个数</summary>
-        public override Int32 Count => Invoke<Int32>(nameof(Count));
+        public override Int32 Count
+        {
+            get
+            {
+                var rs = Invoke<Packet>(nameof(Count));
+                if (rs == null || rs.Total == 0) return 0;
+
+                return rs.ReadBytes(0, 4).ToInt();
+            }
+        }
 
         /// <summary>所有键</summary>
         public override ICollection<String> Keys => Invoke<String[]>(nameof(Keys));

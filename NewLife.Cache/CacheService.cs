@@ -17,7 +17,7 @@ namespace NewLife.Caching
         #region 基础操作
         /// <summary>缓存个数</summary>
         [Api(nameof(Count))]
-        public Int32 Count() => Cache.Count;
+        public Packet Count() => Cache.Count.GetBytes();
 
         /// <summary>所有键</summary>
         [Api(nameof(Keys))]
