@@ -189,31 +189,82 @@ namespace NewLife.Caching
         /// <param name="key">键</param>
         /// <param name="value">值</param>
         /// <returns></returns>
-        public override T Replace<T>(String key, T value) => Invoke<T>(nameof(Replace), new { key, value });
+        public override T Replace<T>(String key, T value)
+        {
+            var ms = Pool.MemoryStream.Get();
+            var bn = new Binary { Stream = ms };
+            bn.Write(key);
+            bn.Write(value);
+
+            var rs = Invoke<Packet>(nameof(Replace), ms.Put(true));
+            if (rs == null || rs.Total == 0) return default(T);
+
+            return Binary.FastRead<T>(rs.GetStream(), false);
+        }
 
         /// <summary>累加，原子操作</summary>
         /// <param name="key">键</param>
         /// <param name="value">变化量</param>
         /// <returns></returns>
-        public override Int64 Increment(String key, Int64 value) => Invoke<Int64>(nameof(Increment), new { key, value });
+        public override Int64 Increment(String key, Int64 value)
+        {
+            var ms = Pool.MemoryStream.Get();
+            ms.WriteArray(key.GetBytes());
+            ms.Write(value.GetBytes());
+
+            var rs = Invoke<Packet>(nameof(Increment), ms.Put(true));
+            if (rs == null || rs.Total == 0) return 0;
+
+            return rs.ReadBytes(0, 8).ToLong();
+        }
 
         /// <summary>累加，原子操作</summary>
         /// <param name="key">键</param>
         /// <param name="value">变化量</param>
         /// <returns></returns>
-        public override Double Increment(String key, Double value) => Invoke<Double>(nameof(Increment) + "2", new { key, value });
+        public override Double Increment(String key, Double value)
+        {
+            var ms = Pool.MemoryStream.Get();
+            ms.WriteArray(key.GetBytes());
+            ms.Write(BitConverter.GetBytes(value));
+
+            var rs = Invoke<Packet>(nameof(Increment) + "2", ms.Put(true));
+            if (rs == null || rs.Total == 0) return 0;
+
+            return rs.ReadBytes(0, 8).ToDouble();
+        }
 
         /// <summary>递减，原子操作</summary>
         /// <param name="key">键</param>
         /// <param name="value">变化量</param>
         /// <returns></returns>
-        public override Int64 Decrement(String key, Int64 value) => Invoke<Int64>(nameof(Decrement), new { key, value });
+        public override Int64 Decrement(String key, Int64 value)
+        {
+            var ms = Pool.MemoryStream.Get();
+            ms.WriteArray(key.GetBytes());
+            ms.Write(value.GetBytes());
+
+            var rs = Invoke<Packet>(nameof(Decrement), ms.Put(true));
+            if (rs == null || rs.Total == 0) return 0;
+
+            return rs.ReadBytes(0, 8).ToLong();
+        }
 
         /// <summary>递减，原子操作</summary>
         /// <param name="key">键</param>
         /// <param name="value">变化量</param>
         /// <returns></returns>
-        public override Double Decrement(String key, Double value) => Invoke<Double>(nameof(Decrement) + "2", new { key, value });
+        public override Double Decrement(String key, Double value)
+        {
+            var ms = Pool.MemoryStream.Get();
+            ms.WriteArray(key.GetBytes());
+            ms.Write(BitConverter.GetBytes(value));
+
+            var rs = Invoke<Packet>(nameof(Decrement) + "2", ms.Put(true));
+            if (rs == null || rs.Total == 0) return 0;
+
+            return rs.ReadBytes(0, 8).ToDouble();
+        }
         #endregion
     }
 }

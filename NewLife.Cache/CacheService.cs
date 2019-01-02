@@ -137,32 +137,60 @@ namespace NewLife.Caching
         public Object Replace(String key, Object value) => Cache.Replace(key, value);
 
         /// <summary>累加，原子操作</summary>
-        /// <param name="key">键</param>
-        /// <param name="value">变化量</param>
+        /// <param name="data">数据</param>
         /// <returns></returns>
         [Api(nameof(Increment))]
-        public Int64 Increment(String key, Int64 value) => Cache.Increment(key, value);
+        public Packet Increment(Packet data)
+        {
+            var ms = data.GetStream();
+            var key = ms.ReadArray().ToStr();
+            var value = ms.ReadBytes(8).ToLong();
+
+            var rs = Cache.Increment(key, value);
+            return rs.GetBytes();
+        }
 
         /// <summary>累加，原子操作</summary>
-        /// <param name="key">键</param>
-        /// <param name="value">变化量</param>
+        /// <param name="data">数据</param>
         /// <returns></returns>
         [Api(nameof(Increment2))]
-        public Double Increment2(String key, Double value) => Cache.Increment(key, value);
+        public Packet Increment2(Packet data)
+        {
+            var ms = data.GetStream();
+            var key = ms.ReadArray().ToStr();
+            var value = ms.ReadBytes(8).ToDouble();
+
+            var rs = Cache.Increment(key, value);
+            return BitConverter.GetBytes(rs);
+        }
 
         /// <summary>递减，原子操作</summary>
-        /// <param name="key">键</param>
-        /// <param name="value">变化量</param>
+        /// <param name="data">数据</param>
         /// <returns></returns>
         [Api(nameof(Decrement))]
-        public Int64 Decrement(String key, Int64 value) => Cache.Decrement(key, value);
+        public Packet Decrement(Packet data)
+        {
+            var ms = data.GetStream();
+            var key = ms.ReadArray().ToStr();
+            var value = ms.ReadBytes(8).ToLong();
+
+            var rs = Cache.Decrement(key, value);
+            return rs.GetBytes();
+        }
 
         /// <summary>递减，原子操作</summary>
-        /// <param name="key">键</param>
-        /// <param name="value">变化量</param>
+        /// <param name="data">数据</param>
         /// <returns></returns>
         [Api(nameof(Decrement2))]
-        public Double Decrement2(String key, Double value) => Cache.Decrement(key, value);
+        public Packet Decrement2(Packet data)
+        {
+            var ms = data.GetStream();
+            var key = ms.ReadArray().ToStr();
+            var value = ms.ReadBytes(8).ToDouble();
+
+            var rs = Cache.Decrement(key, value);
+            return BitConverter.GetBytes(rs);
+        }
         #endregion
     }
 }
