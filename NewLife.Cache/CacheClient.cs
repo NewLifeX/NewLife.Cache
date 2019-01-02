@@ -59,7 +59,24 @@ namespace NewLife.Caching
         }
 
         /// <summary>所有键</summary>
-        public override ICollection<String> Keys => Invoke<String[]>(nameof(Keys));
+        public override ICollection<String> Keys
+        {
+            get
+            {
+                var rs = Invoke<Packet>(nameof(Keys));
+                if (rs == null || rs.Total == 0) return new String[0];
+
+                var keys = new List<String>();
+                var ms = rs.GetStream();
+                while (ms.Position < ms.Length)
+                {
+                    var key = ms.ReadArray().ToStr();
+                    keys.Add(key);
+                }
+
+                return keys;
+            }
+        }
 
         /// <summary>是否包含缓存项</summary>
         /// <param name="key"></param>

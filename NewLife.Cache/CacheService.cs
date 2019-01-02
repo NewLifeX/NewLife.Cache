@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NewLife.Collections;
 using NewLife.Data;
 using NewLife.Remoting;
 
@@ -21,7 +22,18 @@ namespace NewLife.Caching
 
         /// <summary>所有键</summary>
         [Api(nameof(Keys))]
-        public ICollection<String> Keys() => Cache.Keys;
+        public Packet Keys()
+        {
+            var ks = Cache.Keys;
+
+            var ms = Pool.MemoryStream.Get();
+            foreach (var item in ks)
+            {
+                ms.WriteArray(item.GetBytes());
+            }
+
+            return ms.Put(true);
+        }
 
         /// <summary>是否包含缓存项</summary>
         /// <param name="key">键</param>
