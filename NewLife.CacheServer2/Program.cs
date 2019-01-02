@@ -20,7 +20,8 @@ namespace NewLife.CacheServer
             var svr = new ApiServer(set.Port)
             {
                 //Encoder = new BinaryEncoder(),
-                Log = XTrace.Log
+                Log = XTrace.Log,
+                ShowError = true,
             };
 
             if (set.Debug) svr.EncoderLog = XTrace.Log;

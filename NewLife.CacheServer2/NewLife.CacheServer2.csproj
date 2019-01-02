@@ -26,11 +26,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NewLife.Core" Version="8.0.6940.24647" />
+    <ProjectReference Include="..\NewLife.Cache2\NewLife.Cache2.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NewLife.Cache2\NewLife.Cache2.csproj" />
+    <Reference Include="NewLife.Core">
+      <HintPath>..\DLL20\NewLife.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

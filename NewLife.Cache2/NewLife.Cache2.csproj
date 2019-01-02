@@ -30,7 +30,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NewLife.Core" Version="8.0.6940.24647" />
+    <Reference Include="NewLife.Core">
+      <HintPath>..\DLL20\NewLife.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
