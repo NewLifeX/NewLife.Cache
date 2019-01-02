@@ -126,18 +126,33 @@ namespace NewLife.Caching
                 ms.WriteArray(item.GetBytes());
             }
 
-            return Invoke<Int32>(nameof(Remove), ms.Put(true));
+            var rs = Invoke<Packet>(nameof(Remove), ms.Put(true));
+            if (rs == null || rs.Total == 0) return 0;
+
+            return rs.ReadBytes(0, 4).ToInt();
         }
 
         /// <summary>设置缓存项有效期</summary>
         /// <param name="key">键</param>
         /// <param name="expire">过期时间，秒</param>
-        public override Boolean SetExpire(String key, TimeSpan expire) => Invoke<Boolean>(nameof(SetExpire), new { key, expire = (Int64)expire.TotalSeconds });
+        public override Boolean SetExpire(String key, TimeSpan expire)
+        {
+            var ms = Pool.MemoryStream.Get();
+            ms.WriteArray(key.GetBytes());
+            ms.Write(((Int32)expire.TotalSeconds).GetBytes());
+
+            var rs = Invoke<Packet>(nameof(SetExpire), ms.Put(true));
+            return rs != null && rs.Total > 0 && rs[0] > 0;
+        }
 
         /// <summary>获取缓存项有效期</summary>
         /// <param name="key">键</param>
         /// <returns></returns>
-        public override TimeSpan GetExpire(String key) => TimeSpan.FromSeconds(Invoke<Int64>(nameof(GetExpire), new { key }));
+        public override TimeSpan GetExpire(String key)
+        {
+            var rs = Invoke<Packet>(nameof(GetExpire), key.GetBytes());
+            return TimeSpan.FromSeconds(rs.ReadBytes(0, 4).ToInt());
+        }
         #endregion
 
         #region 集合操作

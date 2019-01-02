@@ -67,32 +67,43 @@ namespace NewLife.Caching
         public Packet Get(Packet key) => Cache.Get<Byte[]>(key.ToStr());
 
         /// <summary>批量移除缓存项</summary>
-        /// <param name="keys">键集合</param>
+        /// <param name="data">数据</param>
         /// <returns></returns>
         [Api(nameof(Remove))]
-        public Int32 Remove(Packet keys)
+        public Packet Remove(Packet data)
         {
-            var ks = new List<String>();
-            var ms = keys.GetStream();
+            var keys = new List<String>();
+            var ms = data.GetStream();
             while (ms.Position < ms.Length)
             {
-                ks.Add(ms.ReadArray().ToStr());
+                keys.Add(ms.ReadArray().ToStr());
             }
 
-            return Cache.Remove(ks.ToArray());
+            return Cache.Remove(keys.ToArray()).GetBytes();
         }
 
         /// <summary>设置缓存项有效期</summary>
-        /// <param name="key">键</param>
-        /// <param name="expire">过期时间，秒</param>
+        /// <param name="data">数据</param>
         [Api(nameof(SetExpire))]
-        public Boolean SetExpire(String key, Int64 expire) => Cache.SetExpire(key, TimeSpan.FromSeconds(expire));
+        public Packet SetExpire(Packet data)
+        {
+            var ms = data.GetStream();
+            var key = ms.ReadArray().ToStr();
+            var expire = ms.ReadBytes(4).ToInt();
+
+            var rs = Cache.SetExpire(key, TimeSpan.FromSeconds(expire));
+            return new[] { (Byte)(rs ? 1 : 0) };
+        }
 
         /// <summary>获取缓存项有效期</summary>
         /// <param name="key">键</param>
         /// <returns></returns>
         [Api(nameof(GetExpire))]
-        public Int64 GetExpire(String key) => (Int64)Cache.GetExpire(key).TotalSeconds;
+        public Packet GetExpire(Packet key)
+        {
+            var rs = (Int64)Cache.GetExpire(key.ToStr()).TotalSeconds;
+            return rs.GetBytes();
+        }
         #endregion
 
         #region 集合操作
