@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using NewLife.Collections;
 using NewLife.Data;
+using NewLife.Reflection;
 using NewLife.Remoting;
 using NewLife.Serialization;
 
@@ -98,7 +98,15 @@ namespace NewLife.Caching
             var bn = new Binary { Stream = ms };
             bn.Write(key);
             bn.Write(expire);
-            bn.Write(value);
+
+            // 基元类型只写，复杂类型Json
+            var type = value.GetType();
+            if (type.GetTypeCode() != TypeCode.Object)
+                bn.Write(value);
+            else if (value is IAccessor acc)
+                acc.Write(ms, bn);
+            else
+                bn.Write(value.ToJson());
 
             var rs = Invoke<Packet>(nameof(Set), ms.Put(true));
             return rs != null && rs.Total > 0 && rs[0] > 0;
@@ -111,6 +119,10 @@ namespace NewLife.Caching
         {
             var rs = Invoke<Packet>(nameof(Get), key.GetBytes());
             if (rs == null || rs.Total == 0) return default(T);
+
+            var type = typeof(T);
+            if (type == typeof(Object) || type == typeof(Packet)) return (T)(Object)rs;
+            if (type == typeof(Byte[])) return (T)(Object)rs.ReadBytes();
 
             return Binary.FastRead<T>(rs.GetStream(), false);
         }
@@ -162,7 +174,27 @@ namespace NewLife.Caching
         /// <returns></returns>
         public override IDictionary<String, T> GetAll<T>(IEnumerable<String> keys)
         {
-            return Invoke<IDictionary<String, T>>(nameof(GetAll), new { keys = keys.ToArray() });
+            var ms = Pool.MemoryStream.Get();
+            foreach (var item in keys)
+            {
+                ms.WriteArray(item.GetBytes());
+            }
+
+            var dic = new Dictionary<String, T>();
+
+            var rs = Invoke<Packet>(nameof(GetAll), ms.Put(true));
+            if (rs == null || rs.Total == 0) return dic;
+
+            ms = rs.GetStream();
+            var bn = new Binary { Stream = ms };
+            while (ms.Position < ms.Length)
+            {
+                var key = bn.Read<String>();
+                var value = bn.Read<T>();
+                dic[key] = value;
+            }
+
+            return dic;
         }
 
         /// <summary>批量设置缓存项</summary>

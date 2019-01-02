@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NewLife.Collections;
 using NewLife.Data;
 using NewLife.Remoting;
+using NewLife.Serialization;
 
 namespace NewLife.Caching
 {
@@ -108,10 +109,29 @@ namespace NewLife.Caching
 
         #region 集合操作
         /// <summary>批量获取缓存项</summary>
-        /// <param name="keys"></param>
+        /// <param name="data">数据</param>
         /// <returns></returns>
         [Api(nameof(GetAll))]
-        public IDictionary<String, Object> GetAll(String[] keys) => Cache.GetAll<Object>(keys);
+        public Packet GetAll(Packet data)
+        {
+            var keys = new List<String>();
+            var ms = data.GetStream();
+            while (ms.Position < ms.Length)
+            {
+                keys.Add(ms.ReadArray().ToStr());
+            }
+
+            var dic = Cache.GetAll<Object>(keys);
+            ms = Pool.MemoryStream.Get();
+            var bn = new Binary { Stream = ms };
+            foreach (var item in dic)
+            {
+                bn.Write(item.Key);
+                bn.Write(item.Value);
+            }
+
+            return ms.Put(true);
+        }
 
         /// <summary>批量设置缓存项</summary>
         /// <param name="values"></param>
