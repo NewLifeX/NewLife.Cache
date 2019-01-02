@@ -24,6 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\NewLife.Cache\BinaryEncoder.cs" Link="BinaryEncoder.cs" />
     <Compile Include="..\NewLife.Cache\CacheClient.cs" Link="CacheClient.cs" />
     <Compile Include="..\NewLife.Cache\CacheService.cs" Link="CacheService.cs" />
   </ItemGroup>

@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("NewLife.CacheServer")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("新生命缓存服务器")]
+[assembly: AssemblyDescription("轻量级缓存服务器，定位于高吞吐（千万级）和低延迟（微秒级）")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("NewLife.CacheServer")]
-[assembly: AssemblyCopyright("Copyright ©  2018")]
+[assembly: AssemblyCopyright("Copyright © 新生命开发团队 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

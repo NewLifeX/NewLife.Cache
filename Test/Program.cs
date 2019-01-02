@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using NewLife.Caching;
 using NewLife.Log;
 using NewLife.Reflection;
@@ -35,8 +32,9 @@ namespace Test
             var client = new CacheClient();
             client.SetServer("tcp://127.0.0.1:1234");
 
-            //client.Bench();
-
+#if !DEBUG
+            client.Bench();
+#else
             client.Set("aa", 1234);
             client.Set("bb", false);
             client.Set("cc", 3.14);
@@ -68,6 +66,7 @@ namespace Test
 
                 Console.WriteLine("{0}={1}", item.Key, val);
             }
+#endif
         }
     }
 }

@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="CacheClient.cs" />
     <Compile Include="CacheService.cs" />
+    <Compile Include="BinaryEncoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -23,6 +23,8 @@ namespace NewLife.Caching
             var ac = Client ?? new ApiClient();
             ac.Servers = servers;
 
+            if (ac.Encoder == null) ac.Encoder = new BinaryEncoder();
+
             Client = ac;
 
             return ac;
@@ -33,10 +35,7 @@ namespace NewLife.Caching
         /// <param name="action"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        protected virtual T Invoke<T>(String action, Object args = null)
-        {
-            return Task.Run(() => Client.InvokeAsync<T>(action, args)).Result;
-        }
+        protected virtual T Invoke<T>(String action, Object args = null) => Task.Run(() => Client.InvokeAsync<T>(action, args)).Result;
         #endregion
 
         #region 基础操作
