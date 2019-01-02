@@ -24,34 +24,51 @@ namespace NewLife.Caching
         public ICollection<String> Keys() => Cache.Keys;
 
         /// <summary>是否包含缓存项</summary>
-        /// <param name="key"></param>
+        /// <param name="key">键</param>
         /// <returns></returns>
         [Api(nameof(ContainsKey))]
         public Packet ContainsKey(Packet key)
         {
-            var rs = Cache.ContainsKey(key.ToStr()) ? 1 : 0;
-            return new[] { (Byte)rs };
+            var rs = Cache.ContainsKey(key.ToStr());
+            return new[] { (Byte)(rs ? 1 : 0) };
         }
 
         /// <summary>设置缓存项</summary>
-        /// <param name="key">键</param>
-        /// <param name="value">值</param>
-        /// <param name="expire">过期时间，秒。小于0时采用默认缓存时间Expire</param>
+        /// <param name="data">参数</param>
         /// <returns></returns>
         [Api(nameof(Set))]
-        public Boolean Set(String key, Object value, Int32 expire = -1) => Cache.Set(key, value, expire);
+        public Packet Set(Packet data)
+        {
+            var ms = data.GetStream();
+            var key = ms.ReadArray().ToStr();
+            var expire = ms.ReadBytes(4).ToInt();
+            var value = ms.ReadBytes();
+
+            var rs = Cache.Set(key, value, expire);
+            return new[] { (Byte)(rs ? 1 : 0) };
+        }
 
         /// <summary>获取缓存项</summary>
         /// <param name="key">键</param>
         /// <returns></returns>
         [Api(nameof(Get))]
-        public Object Get(String key) => Cache.Get<Object>(key);
+        public Packet Get(Packet key) => Cache.Get<Byte[]>(key.ToStr());
 
         /// <summary>批量移除缓存项</summary>
         /// <param name="keys">键集合</param>
         /// <returns></returns>
         [Api(nameof(Remove))]
-        public Int32 Remove(String[] keys) => Cache.Remove(keys);
+        public Int32 Remove(Packet keys)
+        {
+            var ks = new List<String>();
+            var ms = keys.GetStream();
+            while (ms.Position < ms.Length)
+            {
+                ks.Add(ms.ReadArray().ToStr());
+            }
+
+            return Cache.Remove(ks.ToArray());
+        }
 
         /// <summary>设置缓存项有效期</summary>
         /// <param name="key">键</param>

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NewLife.Collections;
 using NewLife.Data;
 using NewLife.Remoting;
+using NewLife.Serialization;
 
 namespace NewLife.Caching
 {
@@ -64,17 +66,42 @@ namespace NewLife.Caching
         /// <param name="value">值</param>
         /// <param name="expire">过期时间，秒。小于0时采用默认缓存时间Expire</param>
         /// <returns></returns>
-        public override Boolean Set<T>(String key, T value, Int32 expire = -1) => Invoke<Boolean>(nameof(Set), new { key, value, expire });
+        public override Boolean Set<T>(String key, T value, Int32 expire = -1)
+        {
+            var ms = Pool.MemoryStream.Get();
+            var bn = new Binary { Stream = ms };
+            bn.Write(key);
+            bn.Write(expire);
+            bn.Write(value);
+
+            var rs = Invoke<Packet>(nameof(Set), ms.Put(true));
+            return rs != null && rs.Total > 0 && rs[0] > 0;
+        }
 
         /// <summary>获取缓存项</summary>
         /// <param name="key">键</param>
         /// <returns></returns>
-        public override T Get<T>(String key) => Invoke<T>(nameof(Get), new { key });
+        public override T Get<T>(String key)
+        {
+            var rs = Invoke<Packet>(nameof(Get), key.GetBytes());
+            if (rs == null || rs.Total == 0) return default(T);
+
+            return Binary.FastRead<T>(rs.GetStream(), false);
+        }
 
         /// <summary>批量移除缓存项</summary>
         /// <param name="keys">键集合</param>
         /// <returns></returns>
-        public override Int32 Remove(params String[] keys) => Invoke<Int32>(nameof(Remove), new { keys });
+        public override Int32 Remove(params String[] keys)
+        {
+            var ms = Pool.MemoryStream.Get();
+            foreach (var item in keys)
+            {
+                ms.WriteArray(item.GetBytes());
+            }
+
+            return Invoke<Int32>(nameof(Remove), ms.Put(true));
+        }
 
         /// <summary>设置缓存项有效期</summary>
         /// <param name="key">键</param>
