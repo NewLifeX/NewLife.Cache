@@ -182,7 +182,17 @@ namespace NewLife.Caching
         /// <param name="value">值</param>
         /// <param name="expire">过期时间，秒。小于0时采用默认缓存时间<seealso cref="Cache.Expire"/></param>
         /// <returns></returns>
-        public override Boolean Add<T>(String key, T value, Int32 expire = -1) => Invoke<Boolean>(nameof(Add), new { key, value, expire });
+        public override Boolean Add<T>(String key, T value, Int32 expire = -1)
+        {
+            var ms = Pool.MemoryStream.Get();
+            var bn = new Binary { Stream = ms };
+            bn.Write(key);
+            bn.Write(expire);
+            bn.Write(value);
+
+            var rs = Invoke<Packet>(nameof(Add), ms.Put(true));
+            return rs != null && rs.Total > 0 && rs[0] > 0;
+        }
 
         /// <summary>设置新值并获取旧值，原子操作</summary>
         /// <typeparam name="T">值类型</typeparam>

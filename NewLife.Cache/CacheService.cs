@@ -122,19 +122,32 @@ namespace NewLife.Caching
 
         #region 高级操作
         /// <summary>添加，已存在时不更新</summary>
-        /// <param name="key">键</param>
-        /// <param name="value">值</param>
-        /// <param name="expire">过期时间，秒。小于0时采用默认缓存时间<seealso cref="Cache.Expire"/></param>
+        /// <param name="data">数据</param>
         /// <returns></returns>
         [Api(nameof(Add))]
-        public Boolean Add(String key, Object value, Int32 expire = -1) => Cache.Add(key, value, expire);
+        public Packet Add(Packet data)
+        {
+            var ms = data.GetStream();
+            var key = ms.ReadArray().ToStr();
+            var expire = ms.ReadBytes(4).ToInt();
+            var value = ms.ReadBytes();
+
+            var rs = Cache.Add(key, value, expire);
+            return new[] { (Byte)(rs ? 1 : 0) };
+        }
 
         /// <summary>设置新值并获取旧值，原子操作</summary>
-        /// <param name="key">键</param>
-        /// <param name="value">值</param>
+        /// <param name="data">数据</param>
         /// <returns></returns>
         [Api(nameof(Replace))]
-        public Object Replace(String key, Object value) => Cache.Replace(key, value);
+        public Packet Replace(Packet data)
+        {
+            var ms = data.GetStream();
+            var key = ms.ReadArray().ToStr();
+            var value = ms.ReadBytes();
+
+            return Cache.Replace(key, value);
+        }
 
         /// <summary>累加，原子操作</summary>
         /// <param name="data">数据</param>
