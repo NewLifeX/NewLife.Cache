@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NewLife.Data;
 using NewLife.Remoting;
 
 namespace NewLife.Caching
@@ -26,7 +27,11 @@ namespace NewLife.Caching
         /// <param name="key"></param>
         /// <returns></returns>
         [Api(nameof(ContainsKey))]
-        public Boolean ContainsKey(String key) => Cache.ContainsKey(key);
+        public Packet ContainsKey(Packet key)
+        {
+            var rs = Cache.ContainsKey(key.ToStr()) ? 1 : 0;
+            return new[] { (Byte)rs };
+        }
 
         /// <summary>设置缓存项</summary>
         /// <param name="key">键</param>

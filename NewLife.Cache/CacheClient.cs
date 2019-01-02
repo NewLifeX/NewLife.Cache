@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NewLife.Data;
 using NewLife.Remoting;
 
 namespace NewLife.Caching
@@ -23,7 +24,7 @@ namespace NewLife.Caching
             var ac = Client ?? new ApiClient();
             ac.Servers = servers;
 
-            if (ac.Encoder == null) ac.Encoder = new BinaryEncoder();
+            //if (ac.Encoder == null) ac.Encoder = new BinaryEncoder();
 
             Client = ac;
 
@@ -52,7 +53,11 @@ namespace NewLife.Caching
         /// <summary>是否包含缓存项</summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public override Boolean ContainsKey(String key) => Invoke<Boolean>(nameof(ContainsKey), new { key });
+        public override Boolean ContainsKey(String key)
+        {
+            var rs = Invoke<Packet>(nameof(ContainsKey), key.GetBytes());
+            return rs != null && rs.Total > 0 && rs[0] > 0;
+        }
 
         /// <summary>设置缓存项</summary>
         /// <param name="key">键</param>

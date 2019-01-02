@@ -36,6 +36,8 @@ namespace Test
             client.Bench();
 #else
             client.Set("aa", 1234);
+            Console.WriteLine(client.ContainsKey("aa"));
+
             client.Set("bb", false);
             client.Set("cc", 3.14);
             client.Set("dd", "NewLife", 5);

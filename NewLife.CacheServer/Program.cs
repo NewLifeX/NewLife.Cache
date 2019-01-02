@@ -27,7 +27,7 @@ namespace NewLife.CacheServer
                 // 服务器
                 var svr = new ApiServer(set.Port)
                 {
-                    Encoder = new BinaryEncoder(),
+                    //Encoder = new BinaryEncoder(),
                     Log = XTrace.Log
                 };
 
