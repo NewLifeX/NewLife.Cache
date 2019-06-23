@@ -1,15 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2047
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewLife.Cache", "NewLife.Cache\NewLife.Cache.csproj", "{628052A9-92A9-4EF4-AC9B-2614FEB46145}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewLife.Cache2", "NewLife.Cache2\NewLife.Cache2.csproj", "{686061F2-CFE9-4162-A943-824F490B5316}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewLife.CacheServer", "NewLife.CacheServer\NewLife.CacheServer.csproj", "{D97683DE-AB82-4F90-8BEB-7DDEE8F28901}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewLife.CacheServer2", "NewLife.CacheServer2\NewLife.CacheServer2.csproj", "{4C592315-F4A7-4EDC-BE5E-0AF897DE711C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewLife.Cache", "NewLife.Cache\NewLife.Cache.csproj", "{628052A9-92A9-4EF4-AC9B-2614FEB46145}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other", "Other", "{50583EA9-E914-41A8-8B88-4CAFB3C8A8C3}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other", "Other", "{50583EA9
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{109E4120-8D43-4BFB-B1A4-A2FACD1A6817}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewLife.CacheServer", "NewLife.CacheServer\NewLife.CacheServer.csproj", "{C8B35FC7-E386-4B5B-A115-66FACA640AD2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,22 +24,14 @@ Global
 		{628052A9-92A9-4EF4-AC9B-2614FEB46145}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{628052A9-92A9-4EF4-AC9B-2614FEB46145}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{628052A9-92A9-4EF4-AC9B-2614FEB46145}.Release|Any CPU.Build.0 = Release|Any CPU
-		{686061F2-CFE9-4162-A943-824F490B5316}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{686061F2-CFE9-4162-A943-824F490B5316}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{686061F2-CFE9-4162-A943-824F490B5316}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{686061F2-CFE9-4162-A943-824F490B5316}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D97683DE-AB82-4F90-8BEB-7DDEE8F28901}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D97683DE-AB82-4F90-8BEB-7DDEE8F28901}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D97683DE-AB82-4F90-8BEB-7DDEE8F28901}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D97683DE-AB82-4F90-8BEB-7DDEE8F28901}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4C592315-F4A7-4EDC-BE5E-0AF897DE711C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4C592315-F4A7-4EDC-BE5E-0AF897DE711C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4C592315-F4A7-4EDC-BE5E-0AF897DE711C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4C592315-F4A7-4EDC-BE5E-0AF897DE711C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{109E4120-8D43-4BFB-B1A4-A2FACD1A6817}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{109E4120-8D43-4BFB-B1A4-A2FACD1A6817}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{109E4120-8D43-4BFB-B1A4-A2FACD1A6817}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{109E4120-8D43-4BFB-B1A4-A2FACD1A6817}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8B35FC7-E386-4B5B-A115-66FACA640AD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8B35FC7-E386-4B5B-A115-66FACA640AD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8B35FC7-E386-4B5B-A115-66FACA640AD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8B35FC7-E386-4B5B-A115-66FACA640AD2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
