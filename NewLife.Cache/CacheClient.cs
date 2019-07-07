@@ -6,6 +6,9 @@ using NewLife.Data;
 using NewLife.Reflection;
 using NewLife.Remoting;
 using NewLife.Serialization;
+#if !NET4
+using TaskEx = System.Threading.Tasks.Task;
+#endif
 
 namespace NewLife.Caching
 {
@@ -38,7 +41,7 @@ namespace NewLife.Caching
         /// <param name="action"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        protected virtual T Invoke<T>(String action, Object args = null) => Task.Run(() => Client.InvokeAsync<T>(action, args)).Result;
+        protected virtual T Invoke<T>(String action, Object args = null) => TaskEx.Run(() => Client.InvokeAsync<T>(action, args)).Result;
         #endregion
 
         #region 基础操作
