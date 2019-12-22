@@ -73,8 +73,9 @@ namespace NewLife.Caching
         /// <summary>解码参数</summary>
         /// <param name="action"></param>
         /// <param name="data"></param>
+        /// <param name="msg"></param>
         /// <returns></returns>
-        public IDictionary<String, Object> DecodeParameters(String action, Packet data)
+        public IDictionary<String, Object> DecodeParameters(String action, Packet data, IMessage msg)
         {
             var dic = new Dictionary<String, Object>();
             var ms = data.GetStream();
