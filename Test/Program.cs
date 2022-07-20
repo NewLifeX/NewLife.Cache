@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using NewLife;
 using NewLife.Caching;
 using NewLife.Log;
 using NewLife.Reflection;
@@ -53,7 +54,7 @@ namespace Test
 
             Console.WriteLine();
             Console.WriteLine("Count={0}", client.Count);
-            Console.WriteLine("Keys={0}", client.Keys.Join());
+            Console.WriteLine("Keys={0}", client.Keys.Join(","));
             Thread.Sleep(2000);
             Console.WriteLine("Expire={0}", client.GetExpire("dd"));
 
