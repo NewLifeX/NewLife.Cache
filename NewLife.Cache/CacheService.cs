@@ -53,7 +53,7 @@ public class CacheService
     {
         var ms = data.GetStream();
         var key = ms.ReadArray().ToStr();
-        var expire = ms.ReadBytes(4).ToInt();
+        var expire = (Int32)ms.ReadBytes(4).ToUInt32(0, false);
         var value = ms.ReadBytes();
 
         var rs = Cache.Set(key, value, expire);
