@@ -126,7 +126,14 @@ public class CacheService
         foreach (var item in dic)
         {
             bn.Write(item.Key);
-            bn.Write(item.Value);
+
+            // 统一使用二进制序列化返回数据，否则客户端无法解码
+            if (item.Value is Packet pk)
+                bn.Write(pk);
+            else if (item.Value is Byte[] buf)
+                bn.Write(buf);
+            else
+                bn.Write(Binary.FastWrite(item.Value));
         }
 
         return ms.Put(true);

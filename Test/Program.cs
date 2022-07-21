@@ -68,11 +68,11 @@ internal class Program
         client.Increment("cc", 0.3);
 
         Console.WriteLine();
-        var dic = client.GetAll<Object>(new[] { "aa", "cc", "ee" });
+        var dic = client.GetAll<Packet>(new[] { "aa", "bb", "cc", "dd", "ee" });
         foreach (var item in dic)
         {
-            var val = item.Value;
-            if (val != null && item.Value.GetType().GetTypeCode() == TypeCode.Object) val = val.ToJson();
+            var val = item.Value.ToHex();
+            //if (val != null && item.Value.GetType().GetTypeCode() == TypeCode.Object) val = val.ToHex();
 
             Console.WriteLine("{0}={1}", item.Key, val);
         }
