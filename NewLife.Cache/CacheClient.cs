@@ -99,14 +99,12 @@ public class CacheClient : Cache
         bn.Write(key);
         bn.Write(expire);
 
-        // 基元类型只写，复杂类型Json
+        // 直接二进制序列化数据
         var type = value.GetType();
-        if (type.GetTypeCode() != TypeCode.Object)
-            bn.Write(value);
-        else if (value is IAccessor acc)
+        if (value is IAccessor acc)
             acc.Write(ms, bn);
         else
-            bn.Write(value.ToJson());
+            bn.Write(value);
 
         var rs = Invoke<Packet>(nameof(Set), ms.Put(true));
         return rs != null && rs.Total > 0 && rs[0] > 0;

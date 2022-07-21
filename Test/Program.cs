@@ -49,13 +49,13 @@ internal class Program
         client.Set("bb", false);
         client.Set("cc", 3.14);
         client.Set("dd", "NewLife", 5);
-        client.Set("ee", new { Name = "新生命", Year = 2002 });
+        client.Set("ee", new Student { Name = "新生命", Age = 24 });
 
         Console.WriteLine(client.Get<Int32>("aa"));
         Console.WriteLine(client.Get<Boolean>("bb"));
         Console.WriteLine(client.Get<Double>("cc"));
         Console.WriteLine(client.Get<String>("dd"));
-        Console.WriteLine(client.Get<Packet>("ee").ToStr());
+        Console.WriteLine(client.Get<Student>("ee").ToJson());
 
         Console.WriteLine();
         Console.WriteLine("Count={0}", client.Count);
@@ -77,5 +77,12 @@ internal class Program
             Console.WriteLine("{0}={1}", item.Key, val);
         }
 #endif
+    }
+
+    class Student
+    {
+        public String Name { get; set; }
+
+        public Int32 Age { get; set; }
     }
 }
