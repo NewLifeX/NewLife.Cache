@@ -6,7 +6,7 @@ using NewLife.Serialization;
 namespace NewLife.Caching;
 
 /// <summary>缓存服务</summary>
-/// <remarks>所有接口以Packet作为出入参，避免Json序列化，最大程度提升性能</remarks>
+/// <remarks>所有接口以IPacket作为出入参，避免Json序列化，最大程度提升性能</remarks>
 [Api(null)]
 public class CacheService
 {
@@ -18,11 +18,11 @@ public class CacheService
     #region 基础操作
     /// <summary>缓存个数</summary>
     [Api(nameof(Count))]
-    public Packet Count() => Cache.Count.GetBytes();
+    public IPacket Count() => (ArrayPacket)Cache.Count.GetBytes();
 
     /// <summary>所有键</summary>
     [Api(nameof(Keys))]
-    public Packet Keys()
+    public IPacket Keys()
     {
         var ks = Cache.Keys;
 
@@ -32,24 +32,24 @@ public class CacheService
             ms.WriteArray(item.GetBytes());
         }
 
-        return ms.Return(true);
+        return (ArrayPacket)ms.Return(true);
     }
 
     /// <summary>是否包含缓存项</summary>
     /// <param name="key">键</param>
     /// <returns></returns>
     [Api(nameof(ContainsKey))]
-    public Packet ContainsKey(Packet key)
+    public IPacket ContainsKey(IPacket key)
     {
         var rs = Cache.ContainsKey(key.ToStr());
-        return new[] { (Byte)(rs ? 1 : 0) };
+        return (ArrayPacket)new[] { (Byte)(rs ? 1 : 0) };
     }
 
     /// <summary>设置缓存项</summary>
     /// <param name="data">参数</param>
     /// <returns></returns>
     [Api(nameof(Set))]
-    public Packet Set(Packet data)
+    public IPacket Set(IPacket data)
     {
         var ms = data.GetStream();
         var key = ms.ReadArray().ToStr();
@@ -57,20 +57,20 @@ public class CacheService
         var value = ms.ReadBytes(-1);
 
         var rs = Cache.Set(key, value, expire);
-        return new[] { (Byte)(rs ? 1 : 0) };
+        return (ArrayPacket)new[] { (Byte)(rs ? 1 : 0) };
     }
 
     /// <summary>获取缓存项</summary>
     /// <param name="key">键</param>
     /// <returns></returns>
     [Api(nameof(Get))]
-    public Packet Get(Packet key) => Cache.Get<Byte[]>(key.ToStr());
+    public IPacket Get(IPacket key) => (ArrayPacket)Cache.Get<Byte[]>(key.ToStr());
 
     /// <summary>批量移除缓存项</summary>
     /// <param name="data">数据</param>
     /// <returns></returns>
     [Api(nameof(Remove))]
-    public Packet Remove(Packet data)
+    public IPacket Remove(IPacket data)
     {
         var keys = new List<String>();
         var ms = data.GetStream();
@@ -79,30 +79,30 @@ public class CacheService
             keys.Add(ms.ReadArray().ToStr());
         }
 
-        return Cache.Remove(keys.ToArray()).GetBytes();
+        return (ArrayPacket)Cache.Remove(keys.ToArray()).GetBytes();
     }
 
     /// <summary>设置缓存项有效期</summary>
     /// <param name="data">数据</param>
     [Api(nameof(SetExpire))]
-    public Packet SetExpire(Packet data)
+    public IPacket SetExpire(IPacket data)
     {
         var ms = data.GetStream();
         var key = ms.ReadArray().ToStr();
         var expire = ms.ReadBytes(4).ToInt();
 
         var rs = Cache.SetExpire(key, TimeSpan.FromSeconds(expire));
-        return new[] { (Byte)(rs ? 1 : 0) };
+        return (ArrayPacket)new[] { (Byte)(rs ? 1 : 0) };
     }
 
     /// <summary>获取缓存项有效期</summary>
     /// <param name="key">键</param>
     /// <returns></returns>
     [Api(nameof(GetExpire))]
-    public Packet GetExpire(Packet key)
+    public IPacket GetExpire(IPacket key)
     {
         var rs = (Int64)Cache.GetExpire(key.ToStr()).TotalSeconds;
-        return rs.GetBytes();
+        return (ArrayPacket)rs.GetBytes();
     }
     #endregion
 
@@ -111,7 +111,7 @@ public class CacheService
     /// <param name="data">数据</param>
     /// <returns></returns>
     [Api(nameof(GetAll))]
-    public Packet GetAll(Packet data)
+    public IPacket GetAll(IPacket data)
     {
         var keys = new List<String>();
         var ms = data.GetStream();
@@ -121,14 +121,14 @@ public class CacheService
         }
 
         var dic = Cache.GetAll<Object>(keys);
-        ms = Pool.MemoryStream.Get();
-        var bn = new Binary { Stream = ms };
+        var ms2 = Pool.MemoryStream.Get();
+        var bn = new Binary { Stream = ms2 };
         foreach (var item in dic)
         {
             bn.Write(item.Key);
 
             // 统一使用二进制序列化返回数据，否则客户端无法解码
-            if (item.Value is Packet pk)
+            if (item.Value is IPacket pk)
                 bn.Write(pk);
             else if (item.Value is Byte[] buf)
                 bn.Write(buf);
@@ -136,7 +136,7 @@ public class CacheService
                 bn.Write(Binary.FastWrite(item.Value));
         }
 
-        return ms.Return(true);
+        return (ArrayPacket)ms2.Return(true);
     }
 
     /// <summary>批量设置缓存项</summary>
@@ -151,7 +151,7 @@ public class CacheService
     /// <param name="data">数据</param>
     /// <returns></returns>
     [Api(nameof(Add))]
-    public Packet Add(Packet data)
+    public IPacket Add(IPacket data)
     {
         var ms = data.GetStream();
         var key = ms.ReadArray().ToStr();
@@ -159,76 +159,76 @@ public class CacheService
         var value = ms.ReadBytes(-1);
 
         var rs = Cache.Add(key, value, expire);
-        return new[] { (Byte)(rs ? 1 : 0) };
+        return (ArrayPacket)new[] { (Byte)(rs ? 1 : 0) };
     }
 
     /// <summary>设置新值并获取旧值，原子操作</summary>
     /// <param name="data">数据</param>
     /// <returns></returns>
     [Api(nameof(Replace))]
-    public Packet Replace(Packet data)
+    public IPacket Replace(IPacket data)
     {
         var ms = data.GetStream();
         var key = ms.ReadArray().ToStr();
         var value = ms.ReadBytes(-1);
 
-        return Cache.Replace(key, value);
+        return (ArrayPacket)Cache.Replace(key, value);
     }
 
     /// <summary>累加，原子操作</summary>
     /// <param name="data">数据</param>
     /// <returns></returns>
     [Api(nameof(Increment))]
-    public Packet Increment(Packet data)
+    public IPacket Increment(IPacket data)
     {
         var ms = data.GetStream();
         var key = ms.ReadArray().ToStr();
         var value = ms.ReadBytes(8).ToLong();
 
         var rs = Cache.Increment(key, value);
-        return rs.GetBytes();
+        return (ArrayPacket)rs.GetBytes();
     }
 
     /// <summary>累加，原子操作</summary>
     /// <param name="data">数据</param>
     /// <returns></returns>
     [Api(nameof(Increment2))]
-    public Packet Increment2(Packet data)
+    public IPacket Increment2(IPacket data)
     {
         var ms = data.GetStream();
         var key = ms.ReadArray().ToStr();
         var value = ms.ReadBytes(8).ToDouble();
 
         var rs = Cache.Increment(key, value);
-        return BitConverter.GetBytes(rs);
+        return (ArrayPacket)BitConverter.GetBytes(rs);
     }
 
     /// <summary>递减，原子操作</summary>
     /// <param name="data">数据</param>
     /// <returns></returns>
     [Api(nameof(Decrement))]
-    public Packet Decrement(Packet data)
+    public IPacket Decrement(IPacket data)
     {
         var ms = data.GetStream();
         var key = ms.ReadArray().ToStr();
         var value = ms.ReadBytes(8).ToLong();
 
         var rs = Cache.Decrement(key, value);
-        return rs.GetBytes();
+        return (ArrayPacket)rs.GetBytes();
     }
 
     /// <summary>递减，原子操作</summary>
     /// <param name="data">数据</param>
     /// <returns></returns>
     [Api(nameof(Decrement2))]
-    public Packet Decrement2(Packet data)
+    public IPacket Decrement2(IPacket data)
     {
         var ms = data.GetStream();
         var key = ms.ReadArray().ToStr();
         var value = ms.ReadBytes(8).ToDouble();
 
         var rs = Cache.Decrement(key, value);
-        return BitConverter.GetBytes(rs);
+        return (ArrayPacket)BitConverter.GetBytes(rs);
     }
     #endregion
 }
