@@ -18,7 +18,7 @@ internal class Program
         }
 
         private ApiServer _Server;
-        protected override void StartWork(String reason)
+        public override void StartWork(String reason)
         {
             // 配置
             var set = Setting.Current;
@@ -61,7 +61,7 @@ internal class Program
             base.StartWork(reason);
         }
 
-        protected override void StopWork(String reason)
+        public override void StopWork(String reason)
         {
             _Server.TryDispose();
             _Server = null;

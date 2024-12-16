@@ -32,7 +32,7 @@ public class CacheService
             ms.WriteArray(item.GetBytes());
         }
 
-        return ms.Put(true);
+        return ms.Return(true);
     }
 
     /// <summary>是否包含缓存项</summary>
@@ -54,7 +54,7 @@ public class CacheService
         var ms = data.GetStream();
         var key = ms.ReadArray().ToStr();
         var expire = (Int32)ms.ReadBytes(4).ToUInt32(0, false);
-        var value = ms.ReadBytes();
+        var value = ms.ReadBytes(-1);
 
         var rs = Cache.Set(key, value, expire);
         return new[] { (Byte)(rs ? 1 : 0) };
@@ -136,7 +136,7 @@ public class CacheService
                 bn.Write(Binary.FastWrite(item.Value));
         }
 
-        return ms.Put(true);
+        return ms.Return(true);
     }
 
     /// <summary>批量设置缓存项</summary>
@@ -156,7 +156,7 @@ public class CacheService
         var ms = data.GetStream();
         var key = ms.ReadArray().ToStr();
         var expire = ms.ReadBytes(4).ToInt();
-        var value = ms.ReadBytes();
+        var value = ms.ReadBytes(-1);
 
         var rs = Cache.Add(key, value, expire);
         return new[] { (Byte)(rs ? 1 : 0) };
@@ -170,7 +170,7 @@ public class CacheService
     {
         var ms = data.GetStream();
         var key = ms.ReadArray().ToStr();
-        var value = ms.ReadBytes();
+        var value = ms.ReadBytes(-1);
 
         return Cache.Replace(key, value);
     }

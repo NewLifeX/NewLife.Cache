@@ -106,7 +106,7 @@ public class CacheClient : Cache
         else
             bn.Write(value);
 
-        var rs = Invoke<Packet>(nameof(Set), ms.Put(true));
+        var rs = Invoke<Packet>(nameof(Set), ms.Return(true));
         return rs != null && rs.Total > 0 && rs[0] > 0;
     }
 
@@ -125,6 +125,11 @@ public class CacheClient : Cache
         return Binary.FastRead<T>(rs.GetStream(), false);
     }
 
+    /// <summary>移除缓存项</summary>
+    /// <param name="key">键</param>
+    /// <returns></returns>
+    public override Int32 Remove(String key) => Remove([key]);
+
     /// <summary>批量移除缓存项</summary>
     /// <param name="keys">键集合</param>
     /// <returns></returns>
@@ -136,7 +141,7 @@ public class CacheClient : Cache
             ms.WriteArray(item.GetBytes());
         }
 
-        var rs = Invoke<Packet>(nameof(Remove), ms.Put(true));
+        var rs = Invoke<Packet>(nameof(Remove), ms.Return(true));
         if (rs == null || rs.Total == 0) return 0;
 
         return rs.ReadBytes(0, 4).ToInt();
@@ -151,7 +156,7 @@ public class CacheClient : Cache
         ms.WriteArray(key.GetBytes());
         ms.Write(((Int32)expire.TotalSeconds).GetBytes());
 
-        var rs = Invoke<Packet>(nameof(SetExpire), ms.Put(true));
+        var rs = Invoke<Packet>(nameof(SetExpire), ms.Return(true));
         return rs != null && rs.Total > 0 && rs[0] > 0;
     }
 
@@ -180,7 +185,7 @@ public class CacheClient : Cache
 
         var dic = new Dictionary<String, T>();
 
-        var rs = Invoke<Packet>(nameof(GetAll), ms.Put(true));
+        var rs = Invoke<Packet>(nameof(GetAll), ms.Return(true));
         if (rs == null || rs.Total == 0) return dic;
 
         ms = rs.GetStream();
@@ -217,7 +222,7 @@ public class CacheClient : Cache
         bn.Write(expire);
         bn.Write(value);
 
-        var rs = Invoke<Packet>(nameof(Add), ms.Put(true));
+        var rs = Invoke<Packet>(nameof(Add), ms.Return(true));
         return rs != null && rs.Total > 0 && rs[0] > 0;
     }
 
@@ -233,7 +238,7 @@ public class CacheClient : Cache
         bn.Write(key);
         bn.Write(value);
 
-        var rs = Invoke<Packet>(nameof(Replace), ms.Put(true));
+        var rs = Invoke<Packet>(nameof(Replace), ms.Return(true));
         if (rs == null || rs.Total == 0) return default(T);
 
         return Binary.FastRead<T>(rs.GetStream(), false);
@@ -249,7 +254,7 @@ public class CacheClient : Cache
         ms.WriteArray(key.GetBytes());
         ms.Write(value.GetBytes());
 
-        var rs = Invoke<Packet>(nameof(Increment), ms.Put(true));
+        var rs = Invoke<Packet>(nameof(Increment), ms.Return(true));
         if (rs == null || rs.Total == 0) return 0;
 
         return rs.ReadBytes(0, 8).ToLong();
@@ -265,7 +270,7 @@ public class CacheClient : Cache
         ms.WriteArray(key.GetBytes());
         ms.Write(BitConverter.GetBytes(value));
 
-        var rs = Invoke<Packet>(nameof(Increment) + "2", ms.Put(true));
+        var rs = Invoke<Packet>(nameof(Increment) + "2", ms.Return(true));
         if (rs == null || rs.Total == 0) return 0;
 
         return rs.ReadBytes(0, 8).ToDouble();
@@ -281,7 +286,7 @@ public class CacheClient : Cache
         ms.WriteArray(key.GetBytes());
         ms.Write(value.GetBytes());
 
-        var rs = Invoke<Packet>(nameof(Decrement), ms.Put(true));
+        var rs = Invoke<Packet>(nameof(Decrement), ms.Return(true));
         if (rs == null || rs.Total == 0) return 0;
 
         return rs.ReadBytes(0, 8).ToLong();
@@ -297,7 +302,7 @@ public class CacheClient : Cache
         ms.WriteArray(key.GetBytes());
         ms.Write(BitConverter.GetBytes(value));
 
-        var rs = Invoke<Packet>(nameof(Decrement) + "2", ms.Put(true));
+        var rs = Invoke<Packet>(nameof(Decrement) + "2", ms.Return(true));
         if (rs == null || rs.Total == 0) return 0;
 
         return rs.ReadBytes(0, 8).ToDouble();
