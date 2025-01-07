@@ -131,7 +131,7 @@ public class CacheService
             if (item.Value is IPacket pk)
                 bn.Write(pk);
             else if (item.Value is Byte[] buf)
-                bn.Write(buf);
+                bn.Write((ReadOnlySpan<Byte>)buf);
             else
                 bn.Write(Binary.FastWrite(item.Value));
         }
