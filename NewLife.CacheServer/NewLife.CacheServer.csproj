@@ -21,7 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NewLife.Agent" Version="10.11.2025.101" />
+    <PackageReference Include="NewLife.Agent" Version="10.13.2025.604" />
   </ItemGroup>
 
   <ItemGroup>
