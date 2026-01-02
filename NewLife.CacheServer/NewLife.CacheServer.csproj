@@ -7,7 +7,7 @@
     <AssemblyTitle>新生命缓存服务器</AssemblyTitle>
     <Description>新生命缓存服务器</Description>
     <Company>新生命开发团队</Company>
-    <Copyright>©2002-2025 NewLife</Copyright>
+    <Copyright>©2002-2026 NewLife</Copyright>
     <VersionPrefix>1.1</VersionPrefix>
     <VersionSuffix>$([System.DateTime]::Now.ToString(`yyyy.MMdd`))</VersionSuffix>
     <Version>$(VersionPrefix).$(VersionSuffix)</Version>
@@ -21,7 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NewLife.Agent" Version="10.13.2025.1001" />
+    <PackageReference Include="NewLife.Agent" Version="10.14.2026.102" />
   </ItemGroup>
 
   <ItemGroup>
